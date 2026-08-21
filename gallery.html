@@ -55,11 +55,7 @@
     .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
     .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-    /* UPLOAD HINT */
-    .upload-hint { margin: 0 clamp(1.5rem, 8vw, 8rem) 2.5rem; max-width: 1060px; margin-left: auto; margin-right: auto; background: var(--bg2); border: 1px dashed var(--border); border-radius: var(--radius); padding: 1.25rem 1.75rem; display: flex; align-items: flex-start; gap: 1rem; }
-    .hint-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
-    .hint-text { font-size: 0.85rem; color: var(--text-muted); line-height: 1.65; }
-    .hint-text strong { color: var(--text); }
+
 
     /* GALLERY */
     .gallery-wrap { padding: 0 clamp(1.5rem, 8vw, 8rem) 6rem; max-width: 1100px; margin: 0 auto; }
@@ -82,7 +78,6 @@
     .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 1rem; }
     .gallery-item:hover .gallery-overlay { opacity: 1; }
     .overlay-tag { font-size: 0.68rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 2px; }
-    .overlay-title { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 500; color: #fff; }
 
     .empty-state { display: none; text-align: center; padding: 4rem 2rem; color: var(--text-dim); }
     .empty-state.visible { display: block; }
@@ -159,57 +154,53 @@
   <button class="filter-btn" onclick="filterGallery('university', this)" data-i18n="filter_uni">University</button>
 </div>
 
-<div class="upload-hint">
-  <div class="hint-icon">💡</div>
-  <div class="hint-text" data-i18n="hint_text"><strong>How to add your photos:</strong> Create an <strong>images/</strong> folder in your GitHub repository and upload your photos there. Then replace each placeholder's inner HTML with: <strong>&lt;img src="images/yourphoto.jpg" alt="description"&gt;</strong></div>
-</div>
 
 <div class="gallery-wrap">
   <div class="gallery-grid">
 
     <div class="gallery-item" data-cat="personal" onclick="openLightbox(0)">
       <div class="gallery-placeholder tall"><div class="placeholder-icon">🖼️</div><div class="placeholder-label" data-i18n="filter_personal">Personal</div></div>
-      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_personal">Personal</span><span class="overlay-title" data-i18n="photo1_cap">Your caption here</span></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_personal">Personal</span></div>
     </div>
 
     <div class="gallery-item" data-cat="cnc" onclick="openLightbox(1)">
       <div class="gallery-placeholder"><div class="placeholder-icon">⚙️</div><div class="placeholder-label" data-i18n="filter_cnc">CNC & Workshop</div></div>
-      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_cnc">CNC & Workshop</span><span class="overlay-title" data-i18n="photo2_cap">Your caption here</span></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_cnc">CNC & Workshop</span></div>
     </div>
 
     <div class="gallery-item" data-cat="university" onclick="openLightbox(2)">
       <div class="gallery-placeholder wide"><div class="placeholder-icon">🎓</div><div class="placeholder-label" data-i18n="filter_uni">University</div></div>
-      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_uni">University</span><span class="overlay-title" data-i18n="photo3_cap">Your caption here</span></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_uni">University</span></div>
     </div>
 
     <div class="gallery-item" data-cat="cnc" onclick="openLightbox(3)">
       <div class="gallery-placeholder tall"><div class="placeholder-icon">🔩</div><div class="placeholder-label" data-i18n="filter_cnc">CNC & Workshop</div></div>
-      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_cnc">CNC & Workshop</span><span class="overlay-title" data-i18n="photo4_cap">Your caption here</span></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_cnc">CNC & Workshop</span></div>
     </div>
 
     <div class="gallery-item" data-cat="personal" onclick="openLightbox(4)">
       <div class="gallery-placeholder"><div class="placeholder-icon">🖼️</div><div class="placeholder-label" data-i18n="filter_personal">Personal</div></div>
-      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_personal">Personal</span><span class="overlay-title" data-i18n="photo5_cap">Your caption here</span></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_personal">Personal</span></div>
     </div>
 
     <div class="gallery-item" data-cat="university" onclick="openLightbox(5)">
       <div class="gallery-placeholder"><div class="placeholder-icon">📐</div><div class="placeholder-label" data-i18n="filter_uni">University</div></div>
-      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_uni">University</span><span class="overlay-title" data-i18n="photo6_cap">Your caption here</span></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_uni">University</span></div>
     </div>
 
     <div class="gallery-item" data-cat="personal" onclick="openLightbox(6)">
       <div class="gallery-placeholder wide"><div class="placeholder-icon">🖼️</div><div class="placeholder-label" data-i18n="filter_personal">Personal</div></div>
-      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_personal">Personal</span><span class="overlay-title" data-i18n="photo7_cap">Your caption here</span></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_personal">Personal</span></div>
     </div>
 
     <div class="gallery-item" data-cat="cnc" onclick="openLightbox(7)">
       <div class="gallery-placeholder"><div class="placeholder-icon">🛠️</div><div class="placeholder-label" data-i18n="filter_cnc">CNC & Workshop</div></div>
-      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_cnc">CNC & Workshop</span><span class="overlay-title" data-i18n="photo8_cap">Your caption here</span></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_cnc">CNC & Workshop</span></div>
     </div>
 
     <div class="gallery-item" data-cat="university" onclick="openLightbox(8)">
       <div class="gallery-placeholder tall"><div class="placeholder-icon">🎓</div><div class="placeholder-label" data-i18n="filter_uni">University</div></div>
-      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_uni">University</span><span class="overlay-title" data-i18n="photo9_cap">Your caption here</span></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_uni">University</span></div>
     </div>
 
   </div>
@@ -241,11 +232,7 @@ const T = {
     nav_about:"About", nav_edu:"Education", nav_exp:"Experience", nav_future:"Future", nav_gallery:"Gallery",
     gallery_label:"Gallery", gallery_title:"My Photos",
     gallery_desc:"A visual diary — moments from life, the workshop, and university.",
-    filter_all:"All", filter_personal:"Personal", filter_cnc:"CNC & Workshop", filter_uni:"University",
-    hint_text:'<strong>How to add your photos:</strong> Create an <strong>images/</strong> folder in your GitHub repository and upload your photos there. Then replace each placeholder\'s inner HTML with: <strong>&lt;img src="images/yourphoto.jpg" alt="description"&gt;</strong>',
-    photo1_cap:"Your caption here", photo2_cap:"Your caption here", photo3_cap:"Your caption here",
-    photo4_cap:"Your caption here", photo5_cap:"Your caption here", photo6_cap:"Your caption here",
-    photo7_cap:"Your caption here", photo8_cap:"Your caption here", photo9_cap:"Your caption here",
+    filter_all:"All", filter_personal:"Personal", filter_cnc:"CNC & Workshop", filter_uni:"University",s inner HTML with: <strong>&lt;img src="images/yourphoto.jpg" alt="description"&gt;</strong>',
     empty_text:"No photos in this category yet.",
     footer_built:"Built with HTML & CSS · Hosted on GitHub Pages"
   },
@@ -254,10 +241,6 @@ const T = {
     gallery_label:"Galeri", gallery_title:"Fotoğraflarım",
     gallery_desc:"Görsel bir günlük — hayattan, atölyeden ve üniversiteden anlar.",
     filter_all:"Tümü", filter_personal:"Kişisel", filter_cnc:"CNC & Atölye", filter_uni:"Üniversite",
-    hint_text:'<strong>Fotoğraf nasıl eklenir:</strong> GitHub reponuzda <strong>images/</strong> klasörü oluşturun ve fotoğraflarınızı oraya yükleyin. Ardından her yer tutucunun içini şununla değiştirin: <strong>&lt;img src="images/fotograf.jpg" alt="açıklama"&gt;</strong>',
-    photo1_cap:"Açıklama ekleyin", photo2_cap:"Açıklama ekleyin", photo3_cap:"Açıklama ekleyin",
-    photo4_cap:"Açıklama ekleyin", photo5_cap:"Açıklama ekleyin", photo6_cap:"Açıklama ekleyin",
-    photo7_cap:"Açıklama ekleyin", photo8_cap:"Açıklama ekleyin", photo9_cap:"Açıklama ekleyin",
     empty_text:"Bu kategoride henüz fotoğraf yok.",
     footer_built:"HTML & CSS ile yapıldı · GitHub Pages üzerinde yayınlandı"
   },
@@ -266,10 +249,6 @@ const T = {
     gallery_label:"Galerie", gallery_title:"Meine Fotos",
     gallery_desc:"Ein visuelles Tagebuch — Momente aus dem Leben, der Werkstatt und der Universität.",
     filter_all:"Alle", filter_personal:"Persönlich", filter_cnc:"CNC & Werkstatt", filter_uni:"Universität",
-    hint_text:'<strong>Fotos hinzufügen:</strong> Erstellen Sie einen <strong>images/</strong> Ordner in Ihrem GitHub-Repository und laden Sie Ihre Fotos hoch. Ersetzen Sie dann den Platzhalter durch: <strong>&lt;img src="images/ihrfoto.jpg" alt="beschreibung"&gt;</strong>',
-    photo1_cap:"Beschriftung hinzufügen", photo2_cap:"Beschriftung hinzufügen", photo3_cap:"Beschriftung hinzufügen",
-    photo4_cap:"Beschriftung hinzufügen", photo5_cap:"Beschriftung hinzufügen", photo6_cap:"Beschriftung hinzufügen",
-    photo7_cap:"Beschriftung hinzufügen", photo8_cap:"Beschriftung hinzufügen", photo9_cap:"Beschriftung hinzufügen",
     empty_text:"Noch keine Fotos in dieser Kategorie.",
     footer_built:"Erstellt mit HTML & CSS · Gehostet auf GitHub Pages"
   }
