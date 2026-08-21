@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Erdem Altıparmak</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0D0D0D; --bg2: #141414; --bg3: #1A1A1A;
+      --border: #2A2A2A; --accent: #4A9EFF;
+      --text: #E8E8E8; --text-muted: #888; --text-dim: #555;
+      --radius: 8px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 4rem); height: 64px;
+      background: rgba(13,13,13,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1.05rem; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--accent); }
+    .lang-switcher { display: flex; gap: 4px; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 3px; }
+    .lang-btn { background: none; border: none; color: var(--text-muted); font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; padding: 4px 9px; border-radius: 4px; cursor: pointer; transition: background 0.15s, color 0.15s; }
+    .lang-btn:hover { color: var(--text); }
+    .lang-btn.active { background: var(--accent); color: #fff; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; }
+    .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; background: var(--bg2); border-bottom: 1px solid var(--border); padding: 1.5rem clamp(1.5rem, 5vw, 4rem); z-index: 99; flex-direction: column; gap: 1rem; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: var(--text-muted); text-decoration: none; font-size: 1rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    /* PAGE HEADER */
+    .page-header { padding: 8rem clamp(1.5rem, 8vw, 8rem) 3rem; max-width: 1100px; margin: 0 auto; }
+    .section-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem; }
+    .section-label::before { content: ''; display: block; width: 32px; height: 1px; background: var(--accent); }
+    .page-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .page-desc { font-size: 1rem; color: var(--text-muted); max-width: 520px; line-height: 1.7; }
+
+    /* FILTER */
+    .filter-bar { padding: 0 clamp(1.5rem, 8vw, 8rem) 2.5rem; max-width: 1100px; margin: 0 auto; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .filter-btn { font-family: 'Space Grotesk', sans-serif; font-size: 0.825rem; font-weight: 500; padding: 0.5rem 1.25rem; border-radius: 100px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* UPLOAD HINT */
+    .upload-hint { margin: 0 clamp(1.5rem, 8vw, 8rem) 2.5rem; max-width: 1060px; margin-left: auto; margin-right: auto; background: var(--bg2); border: 1px dashed var(--border); border-radius: var(--radius); padding: 1.25rem 1.75rem; display: flex; align-items: flex-start; gap: 1rem; }
+    .hint-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+    .hint-text { font-size: 0.85rem; color: var(--text-muted); line-height: 1.65; }
+    .hint-text strong { color: var(--text); }
+
+    /* GALLERY */
+    .gallery-wrap { padding: 0 clamp(1.5rem, 8vw, 8rem) 6rem; max-width: 1100px; margin: 0 auto; }
+    .gallery-grid { columns: 3; column-gap: 1rem; }
+    @media (max-width: 900px) { .gallery-grid { columns: 2; } }
+    @media (max-width: 560px) { .gallery-grid { columns: 1; } }
+
+    .gallery-item { break-inside: avoid; margin-bottom: 1rem; position: relative; border-radius: var(--radius); overflow: hidden; cursor: pointer; border: 1px solid var(--border); transition: border-color 0.2s, transform 0.2s; background: var(--bg2); }
+    .gallery-item:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .gallery-item.hidden { display: none; }
+    .gallery-item img { width: 100%; display: block; object-fit: cover; transition: transform 0.4s; }
+    .gallery-item:hover img { transform: scale(1.03); }
+
+    .gallery-placeholder { width: 100%; aspect-ratio: 4/3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem; background: var(--bg3); }
+    .gallery-placeholder.tall { aspect-ratio: 3/4; }
+    .gallery-placeholder.wide { aspect-ratio: 16/9; }
+    .placeholder-icon { font-size: 2rem; opacity: 0.3; }
+    .placeholder-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); opacity: 0.6; }
+
+    .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 1rem; }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .overlay-tag { font-size: 0.68rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 2px; }
+    .overlay-title { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 500; color: #fff; }
+
+    .empty-state { display: none; text-align: center; padding: 4rem 2rem; color: var(--text-dim); }
+    .empty-state.visible { display: block; }
+    .empty-icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.3; }
+    .empty-text { font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; }
+
+    /* LIGHTBOX */
+    .lightbox { position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.93); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 2rem; }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox-inner { position: relative; max-width: 900px; max-height: 90vh; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .lightbox-img { max-width: 100%; max-height: 78vh; object-fit: contain; border-radius: var(--radius); border: 1px solid var(--border); display: none; }
+    .lightbox-placeholder { width: 100%; max-width: 500px; aspect-ratio: 4/3; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: var(--text-dim); }
+    .lightbox-placeholder .placeholder-icon { font-size: 3rem; opacity: 0.25; }
+    .lightbox-caption { text-align: center; }
+    .lightbox-close { position: absolute; top: -3rem; right: 0; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; padding: 0.5rem; transition: color 0.2s; }
+    .lightbox-close:hover { color: var(--text); }
+    .lightbox-nav { position: absolute; top: 40%; transform: translateY(-50%); background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); font-size: 1.2rem; transition: background 0.2s, border-color 0.2s; }
+    .lightbox-nav:hover { background: rgba(74,158,255,0.15); border-color: var(--accent); }
+    .lightbox-nav.prev { left: -3.5rem; }
+    .lightbox-nav.next { right: -3.5rem; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 2rem clamp(1.5rem, 8vw, 8rem); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; max-width: 1100px; margin: 0 auto; }
+    .footer-copy { font-size: 0.8rem; color: var(--text-dim); }
+    .footer-copy span { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .lightbox-nav { display: none; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">EA<span>.</span></a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="index.html#about"      data-i18n="nav_about">About</a></li>
+      <li><a href="index.html#education"  data-i18n="nav_edu">Education</a></li>
+      <li><a href="index.html#experience" data-i18n="nav_exp">Experience</a></li>
+      <li><a href="index.html#future"     data-i18n="nav_future">Future</a></li>
+      <li><a href="gallery.html" class="active" data-i18n="nav_gallery">Gallery</a></li>
+    </ul>
+    <div class="lang-switcher">
+      <button class="lang-btn" onclick="setLang('tr')">TR</button>
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('de')">DE</button>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html#about"      onclick="toggleMenu()" data-i18n="nav_about">About</a>
+  <a href="index.html#education"  onclick="toggleMenu()" data-i18n="nav_edu">Education</a>
+  <a href="index.html#experience" onclick="toggleMenu()" data-i18n="nav_exp">Experience</a>
+  <a href="index.html#future"     onclick="toggleMenu()" data-i18n="nav_future">Future</a>
+  <a href="gallery.html"          onclick="toggleMenu()" data-i18n="nav_gallery">Gallery</a>
+</div>
+
+<div class="page-header">
+  <div class="section-label" data-i18n="gallery_label">Gallery</div>
+  <h1 class="page-title" data-i18n="gallery_title">My Photos</h1>
+  <p class="page-desc" data-i18n="gallery_desc">A visual diary — moments from life, the workshop, and university.</p>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterGallery('all', this)" data-i18n="filter_all">All</button>
+  <button class="filter-btn" onclick="filterGallery('personal', this)" data-i18n="filter_personal">Personal</button>
+  <button class="filter-btn" onclick="filterGallery('cnc', this)" data-i18n="filter_cnc">CNC & Workshop</button>
+  <button class="filter-btn" onclick="filterGallery('university', this)" data-i18n="filter_uni">University</button>
+</div>
+
+<div class="upload-hint">
+  <div class="hint-icon">💡</div>
+  <div class="hint-text" data-i18n="hint_text"><strong>How to add your photos:</strong> Create an <strong>images/</strong> folder in your GitHub repository and upload your photos there. Then replace each placeholder's inner HTML with: <strong>&lt;img src="images/yourphoto.jpg" alt="description"&gt;</strong></div>
+</div>
+
+<div class="gallery-wrap">
+  <div class="gallery-grid">
+
+    <div class="gallery-item" data-cat="personal" onclick="openLightbox(0)">
+      <div class="gallery-placeholder tall"><div class="placeholder-icon">🖼️</div><div class="placeholder-label" data-i18n="filter_personal">Personal</div></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_personal">Personal</span><span class="overlay-title" data-i18n="photo1_cap">Your caption here</span></div>
+    </div>
+
+    <div class="gallery-item" data-cat="cnc" onclick="openLightbox(1)">
+      <div class="gallery-placeholder"><div class="placeholder-icon">⚙️</div><div class="placeholder-label" data-i18n="filter_cnc">CNC & Workshop</div></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_cnc">CNC & Workshop</span><span class="overlay-title" data-i18n="photo2_cap">Your caption here</span></div>
+    </div>
+
+    <div class="gallery-item" data-cat="university" onclick="openLightbox(2)">
+      <div class="gallery-placeholder wide"><div class="placeholder-icon">🎓</div><div class="placeholder-label" data-i18n="filter_uni">University</div></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_uni">University</span><span class="overlay-title" data-i18n="photo3_cap">Your caption here</span></div>
+    </div>
+
+    <div class="gallery-item" data-cat="cnc" onclick="openLightbox(3)">
+      <div class="gallery-placeholder tall"><div class="placeholder-icon">🔩</div><div class="placeholder-label" data-i18n="filter_cnc">CNC & Workshop</div></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_cnc">CNC & Workshop</span><span class="overlay-title" data-i18n="photo4_cap">Your caption here</span></div>
+    </div>
+
+    <div class="gallery-item" data-cat="personal" onclick="openLightbox(4)">
+      <div class="gallery-placeholder"><div class="placeholder-icon">🖼️</div><div class="placeholder-label" data-i18n="filter_personal">Personal</div></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_personal">Personal</span><span class="overlay-title" data-i18n="photo5_cap">Your caption here</span></div>
+    </div>
+
+    <div class="gallery-item" data-cat="university" onclick="openLightbox(5)">
+      <div class="gallery-placeholder"><div class="placeholder-icon">📐</div><div class="placeholder-label" data-i18n="filter_uni">University</div></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_uni">University</span><span class="overlay-title" data-i18n="photo6_cap">Your caption here</span></div>
+    </div>
+
+    <div class="gallery-item" data-cat="personal" onclick="openLightbox(6)">
+      <div class="gallery-placeholder wide"><div class="placeholder-icon">🖼️</div><div class="placeholder-label" data-i18n="filter_personal">Personal</div></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_personal">Personal</span><span class="overlay-title" data-i18n="photo7_cap">Your caption here</span></div>
+    </div>
+
+    <div class="gallery-item" data-cat="cnc" onclick="openLightbox(7)">
+      <div class="gallery-placeholder"><div class="placeholder-icon">🛠️</div><div class="placeholder-label" data-i18n="filter_cnc">CNC & Workshop</div></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_cnc">CNC & Workshop</span><span class="overlay-title" data-i18n="photo8_cap">Your caption here</span></div>
+    </div>
+
+    <div class="gallery-item" data-cat="university" onclick="openLightbox(8)">
+      <div class="gallery-placeholder tall"><div class="placeholder-icon">🎓</div><div class="placeholder-label" data-i18n="filter_uni">University</div></div>
+      <div class="gallery-overlay"><span class="overlay-tag" data-i18n="filter_uni">University</span><span class="overlay-title" data-i18n="photo9_cap">Your caption here</span></div>
+    </div>
+
+  </div>
+  <div class="empty-state" id="emptyState">
+    <div class="empty-icon">📷</div>
+    <div class="empty-text" data-i18n="empty_text">No photos in this category yet.</div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightboxBg(event)">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav prev" onclick="navigateLightbox(-1)">‹</button>
+    <button class="lightbox-nav next" onclick="navigateLightbox(1)">›</button>
+    <div class="lightbox-placeholder" id="lbPlaceholder"><div class="placeholder-icon">🖼️</div></div>
+    <img class="lightbox-img" id="lbImg" src="" alt="" />
+    <div class="lightbox-caption" id="lbCaption"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-copy">© 2025 <span>Erdem Altıparmak</span> · erdemaltiparmak.com</div>
+  <div class="footer-copy" data-i18n="footer_built">Built with HTML & CSS · Hosted on GitHub Pages</div>
+</footer>
+
+<script>
+const T = {
+  en: {
+    nav_about:"About", nav_edu:"Education", nav_exp:"Experience", nav_future:"Future", nav_gallery:"Gallery",
+    gallery_label:"Gallery", gallery_title:"My Photos",
+    gallery_desc:"A visual diary — moments from life, the workshop, and university.",
+    filter_all:"All", filter_personal:"Personal", filter_cnc:"CNC & Workshop", filter_uni:"University",
+    hint_text:'<strong>How to add your photos:</strong> Create an <strong>images/</strong> folder in your GitHub repository and upload your photos there. Then replace each placeholder\'s inner HTML with: <strong>&lt;img src="images/yourphoto.jpg" alt="description"&gt;</strong>',
+    photo1_cap:"Your caption here", photo2_cap:"Your caption here", photo3_cap:"Your caption here",
+    photo4_cap:"Your caption here", photo5_cap:"Your caption here", photo6_cap:"Your caption here",
+    photo7_cap:"Your caption here", photo8_cap:"Your caption here", photo9_cap:"Your caption here",
+    empty_text:"No photos in this category yet.",
+    footer_built:"Built with HTML & CSS · Hosted on GitHub Pages"
+  },
+  tr: {
+    nav_about:"Hakkımda", nav_edu:"Eğitim", nav_exp:"Deneyim", nav_future:"Gelecek", nav_gallery:"Galeri",
+    gallery_label:"Galeri", gallery_title:"Fotoğraflarım",
+    gallery_desc:"Görsel bir günlük — hayattan, atölyeden ve üniversiteden anlar.",
+    filter_all:"Tümü", filter_personal:"Kişisel", filter_cnc:"CNC & Atölye", filter_uni:"Üniversite",
+    hint_text:'<strong>Fotoğraf nasıl eklenir:</strong> GitHub reponuzda <strong>images/</strong> klasörü oluşturun ve fotoğraflarınızı oraya yükleyin. Ardından her yer tutucunun içini şununla değiştirin: <strong>&lt;img src="images/fotograf.jpg" alt="açıklama"&gt;</strong>',
+    photo1_cap:"Açıklama ekleyin", photo2_cap:"Açıklama ekleyin", photo3_cap:"Açıklama ekleyin",
+    photo4_cap:"Açıklama ekleyin", photo5_cap:"Açıklama ekleyin", photo6_cap:"Açıklama ekleyin",
+    photo7_cap:"Açıklama ekleyin", photo8_cap:"Açıklama ekleyin", photo9_cap:"Açıklama ekleyin",
+    empty_text:"Bu kategoride henüz fotoğraf yok.",
+    footer_built:"HTML & CSS ile yapıldı · GitHub Pages üzerinde yayınlandı"
+  },
+  de: {
+    nav_about:"Über mich", nav_edu:"Ausbildung", nav_exp:"Erfahrung", nav_future:"Zukunft", nav_gallery:"Galerie",
+    gallery_label:"Galerie", gallery_title:"Meine Fotos",
+    gallery_desc:"Ein visuelles Tagebuch — Momente aus dem Leben, der Werkstatt und der Universität.",
+    filter_all:"Alle", filter_personal:"Persönlich", filter_cnc:"CNC & Werkstatt", filter_uni:"Universität",
+    hint_text:'<strong>Fotos hinzufügen:</strong> Erstellen Sie einen <strong>images/</strong> Ordner in Ihrem GitHub-Repository und laden Sie Ihre Fotos hoch. Ersetzen Sie dann den Platzhalter durch: <strong>&lt;img src="images/ihrfoto.jpg" alt="beschreibung"&gt;</strong>',
+    photo1_cap:"Beschriftung hinzufügen", photo2_cap:"Beschriftung hinzufügen", photo3_cap:"Beschriftung hinzufügen",
+    photo4_cap:"Beschriftung hinzufügen", photo5_cap:"Beschriftung hinzufügen", photo6_cap:"Beschriftung hinzufügen",
+    photo7_cap:"Beschriftung hinzufügen", photo8_cap:"Beschriftung hinzufügen", photo9_cap:"Beschriftung hinzufügen",
+    empty_text:"Noch keine Fotos in dieser Kategorie.",
+    footer_built:"Erstellt mit HTML & CSS · Gehostet auf GitHub Pages"
+  }
+};
+
+function setLang(lang) {
+  const t = T[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if (t[k]) el.innerHTML = t[k]; });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === lang.toUpperCase()));
+  document.documentElement.lang = lang;
+}
+
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+function filterGallery(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  let visible = 0;
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    const show = cat === 'all' || item.dataset.cat === cat;
+    item.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+  document.getElementById('emptyState').classList.toggle('visible', visible === 0);
+}
+
+let currentIndex = 0;
+const allItems = () => [...document.querySelectorAll('.gallery-item')];
+
+function openLightbox(idx) {
+  currentIndex = idx; renderLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function renderLightbox() {
+  const item = allItems()[currentIndex];
+  if (!item) return;
+  const img = item.querySelector('img');
+  const lbImg = document.getElementById('lbImg');
+  const lbPh  = document.getElementById('lbPlaceholder');
+  const lbCap = document.getElementById('lbCaption');
+  if (img) { lbImg.src = img.src; lbImg.alt = img.alt; lbImg.style.display = 'block'; lbPh.style.display = 'none'; }
+  else { lbImg.style.display = 'none'; lbPh.style.display = 'flex'; }
+  const ov = item.querySelector('.gallery-overlay');
+  lbCap.innerHTML = ov ? ov.innerHTML : '';
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow = ''; }
+function closeLightboxBg(e) { if (e.target === document.getElementById('lightbox')) closeLightbox(); }
+function navigateLightbox(dir) { const items = allItems(); currentIndex = (currentIndex + dir + items.length) % items.length; renderLightbox(); }
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowRight') navigateLightbox(1);
+  if (e.key === 'ArrowLeft')  navigateLightbox(-1);
+});
+document.addEventListener('click', e => {
+  const menu = document.getElementById('mobileMenu');
+  const ham  = document.querySelector('.hamburger');
+  if (menu && ham && !menu.contains(e.target) && !ham.contains(e.target)) menu.classList.remove('open');
+});
+</script>
+</body>
+</html>
